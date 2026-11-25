@@ -1,0 +1,449 @@
+{
+	"info": {
+		"_postman_id": "b2f7c1d0-3a4e-4a11-9a2c-8f0d2e6b4c11",
+		"name": "Clinic Quiz 2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "A1 add specialization",
+			"request": {
+				"method": "PUT",
+				"url": {
+					"raw": "http://localhost:1014/api/doctors/1/specializations/2",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "doctors", "1", "specializations", "2"]
+				}
+			}
+		},
+		{
+			"name": "A1 error 409 doctor already has it (run A1 first)",
+			"request": {
+				"method": "PUT",
+				"url": {
+					"raw": "http://localhost:1014/api/doctors/1/specializations/2",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "doctors", "1", "specializations", "2"]
+				}
+			}
+		},
+		{
+			"name": "A1 error 404 doctor",
+			"request": {
+				"method": "PUT",
+				"url": {
+					"raw": "http://localhost:1014/api/doctors/99/specializations/2",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "doctors", "99", "specializations", "2"]
+				}
+			}
+		},
+		{
+			"name": "A2 remove specialization",
+			"request": {
+				"method": "DELETE",
+				"url": {
+					"raw": "http://localhost:1014/api/doctors/1/specializations/2",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "doctors", "1", "specializations", "2"]
+				}
+			}
+		},
+		{
+			"name": "A2 error 409 doctor does not have it",
+			"request": {
+				"method": "DELETE",
+				"url": {
+					"raw": "http://localhost:1014/api/doctors/1/specializations/2",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "doctors", "1", "specializations", "2"]
+				}
+			}
+		},
+		{
+			"name": "A3 free offices",
+			"request": {
+				"method": "GET",
+				"url": {
+					"raw": "http://localhost:1014/api/offices/free",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "offices", "free"]
+				}
+			}
+		},
+		{
+			"name": "A4 move doctor to office 104",
+			"request": {
+				"method": "PATCH",
+				"url": {
+					"raw": "http://localhost:1014/api/doctors/2/office?officeNumber=104",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "doctors", "2", "office"],
+					"query": [{ "key": "officeNumber", "value": "104" }]
+				}
+			}
+		},
+		{
+			"name": "A4 error 409 office taken (run A4 first)",
+			"request": {
+				"method": "PATCH",
+				"url": {
+					"raw": "http://localhost:1014/api/doctors/1/office?officeNumber=104",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "doctors", "1", "office"],
+					"query": [{ "key": "officeNumber", "value": "104" }]
+				}
+			}
+		},
+		{
+			"name": "A4 error 404 office number",
+			"request": {
+				"method": "PATCH",
+				"url": {
+					"raw": "http://localhost:1014/api/doctors/1/office?officeNumber=999",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "doctors", "1", "office"],
+					"query": [{ "key": "officeNumber", "value": "999" }]
+				}
+			}
+		},
+		{
+			"name": "B1 save appointment in the past (error 400)",
+			"request": {
+				"method": "POST",
+				"header": [{ "key": "Content-Type", "value": "application/json" }],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"appointmentDate\": \"2026-01-01\",\n  \"reason\": \"old visit\",\n  \"status\": \"COMPLETED\",\n  \"patient\": { \"id\": 1 },\n  \"doctor\": { \"id\": 1 }\n}",
+					"options": { "raw": { "language": "json" } }
+				},
+				"url": {
+					"raw": "http://localhost:1014/api/appointments/save",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "appointments", "save"]
+				}
+			}
+		},
+		{
+			"name": "B1 save appointment ok (201, always SCHEDULED)",
+			"request": {
+				"method": "POST",
+				"header": [{ "key": "Content-Type", "value": "application/json" }],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"appointmentDate\": \"2026-12-01\",\n  \"reason\": \"checkup\",\n  \"status\": \"COMPLETED\",\n  \"patient\": { \"id\": 2 },\n  \"doctor\": { \"id\": 2 }\n}",
+					"options": { "raw": { "language": "json" } }
+				},
+				"url": {
+					"raw": "http://localhost:1014/api/appointments/save",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "appointments", "save"]
+				}
+			}
+		},
+		{
+			"name": "B2 status SCHEDULED to CONFIRMED (200)",
+			"request": {
+				"method": "PATCH",
+				"url": {
+					"raw": "http://localhost:1014/api/appointments/3/status?status=CONFIRMED",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "appointments", "3", "status"],
+					"query": [{ "key": "status", "value": "CONFIRMED" }]
+				}
+			}
+		},
+		{
+			"name": "B2 error 400 COMPLETED to CONFIRMED",
+			"request": {
+				"method": "PATCH",
+				"url": {
+					"raw": "http://localhost:1014/api/appointments/5/status?status=CONFIRMED",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "appointments", "5", "status"],
+					"query": [{ "key": "status", "value": "CONFIRMED" }]
+				}
+			}
+		},
+		{
+			"name": "B2 error 404 appointment",
+			"request": {
+				"method": "PATCH",
+				"url": {
+					"raw": "http://localhost:1014/api/appointments/999/status?status=CANCELLED",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "appointments", "999", "status"],
+					"query": [{ "key": "status", "value": "CANCELLED" }]
+				}
+			}
+		},
+		{
+			"name": "B3 reschedule to a free date (200)",
+			"request": {
+				"method": "PATCH",
+				"url": {
+					"raw": "http://localhost:1014/api/appointments/3/reschedule?newDate=2026-12-15",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "appointments", "3", "reschedule"],
+					"query": [{ "key": "newDate", "value": "2026-12-15" }]
+				}
+			}
+		},
+		{
+			"name": "B3 error 409 doctor already booked",
+			"request": {
+				"method": "PATCH",
+				"url": {
+					"raw": "http://localhost:1014/api/appointments/9/reschedule?newDate=2026-11-02",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "appointments", "9", "reschedule"],
+					"query": [{ "key": "newDate", "value": "2026-11-02" }]
+				}
+			}
+		},
+		{
+			"name": "B3 error 400 COMPLETED cannot reschedule",
+			"request": {
+				"method": "PATCH",
+				"url": {
+					"raw": "http://localhost:1014/api/appointments/5/reschedule?newDate=2026-12-15",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "appointments", "5", "reschedule"],
+					"query": [{ "key": "newDate", "value": "2026-12-15" }]
+				}
+			}
+		},
+		{
+			"name": "C1 write prescription (201)",
+			"request": {
+				"method": "POST",
+				"header": [{ "key": "Content-Type", "value": "application/json" }],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"1 tablet, 3 times a day\",\n  \"durationDays\": 7\n}",
+					"options": { "raw": { "language": "json" } }
+				},
+				"url": {
+					"raw": "http://localhost:1014/api/prescriptions/save?appointmentId=5",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "prescriptions", "save"],
+					"query": [{ "key": "appointmentId", "value": "5" }]
+				}
+			}
+		},
+		{
+			"name": "C1 error 400 not a COMPLETED appointment",
+			"request": {
+				"method": "POST",
+				"header": [{ "key": "Content-Type", "value": "application/json" }],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"1 tablet, 3 times a day\",\n  \"durationDays\": 7\n}",
+					"options": { "raw": { "language": "json" } }
+				},
+				"url": {
+					"raw": "http://localhost:1014/api/prescriptions/save?appointmentId=3",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "prescriptions", "save"],
+					"query": [{ "key": "appointmentId", "value": "3" }]
+				}
+			}
+		},
+		{
+			"name": "C1 error 404 appointment",
+			"request": {
+				"method": "POST",
+				"header": [{ "key": "Content-Type", "value": "application/json" }],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"medicineName\": \"Amoxicillin\",\n  \"dosage\": \"1 tablet, 3 times a day\",\n  \"durationDays\": 7\n}",
+					"options": { "raw": { "language": "json" } }
+				},
+				"url": {
+					"raw": "http://localhost:1014/api/prescriptions/save?appointmentId=999",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "prescriptions", "save"],
+					"query": [{ "key": "appointmentId", "value": "999" }]
+				}
+			}
+		},
+		{
+			"name": "C2 prescriptions of appointment 5",
+			"request": {
+				"method": "GET",
+				"url": {
+					"raw": "http://localhost:1014/api/prescriptions/appointment/5",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "prescriptions", "appointment", "5"]
+				}
+			}
+		},
+		{
+			"name": "C2 error 404 appointment",
+			"request": {
+				"method": "GET",
+				"url": {
+					"raw": "http://localhost:1014/api/prescriptions/appointment/999",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "prescriptions", "appointment", "999"]
+				}
+			}
+		},
+		{
+			"name": "C3 history of patient SS-1003",
+			"request": {
+				"method": "GET",
+				"url": {
+					"raw": "http://localhost:1014/api/prescriptions/patient/SS-1003",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "prescriptions", "patient", "SS-1003"]
+				}
+			}
+		},
+		{
+			"name": "C3 empty list SS-1001",
+			"request": {
+				"method": "GET",
+				"url": {
+					"raw": "http://localhost:1014/api/prescriptions/patient/SS-1001",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "prescriptions", "patient", "SS-1001"]
+				}
+			}
+		},
+		{
+			"name": "C4 update prescription (paste a real id from C2)",
+			"request": {
+				"method": "PUT",
+				"header": [{ "key": "Content-Type", "value": "application/json" }],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"medicineName\": \"Amoxicillin 500\",\n  \"dosage\": \"2 tablets, 3 times a day\",\n  \"durationDays\": 10\n}",
+					"options": { "raw": { "language": "json" } }
+				},
+				"url": {
+					"raw": "http://localhost:1014/api/prescriptions/update/PASTE-UUID-HERE",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "prescriptions", "update", "PASTE-UUID-HERE"]
+				}
+			}
+		},
+		{
+			"name": "C4 delete appointment with prescriptions (error 409)",
+			"request": {
+				"method": "DELETE",
+				"url": {
+					"raw": "http://localhost:1014/api/appointments/delete/5",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "appointments", "delete", "5"]
+				}
+			}
+		},
+		{
+			"name": "C4 delete prescription (paste a real id from C2)",
+			"request": {
+				"method": "DELETE",
+				"url": {
+					"raw": "http://localhost:1014/api/prescriptions/delete/PASTE-UUID-HERE",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "prescriptions", "delete", "PASTE-UUID-HERE"]
+				}
+			}
+		},
+		{
+			"name": "D1 agenda of doctor 1 on 2026-10-30",
+			"request": {
+				"method": "GET",
+				"url": {
+					"raw": "http://localhost:1014/api/doctors/1/agenda?date=2026-10-30",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "doctors", "1", "agenda"],
+					"query": [{ "key": "date", "value": "2026-10-30" }]
+				}
+			}
+		},
+		{
+			"name": "D1 error 404 doctor",
+			"request": {
+				"method": "GET",
+				"url": {
+					"raw": "http://localhost:1014/api/doctors/99/agenda?date=2026-10-30",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "doctors", "99", "agenda"],
+					"query": [{ "key": "date", "value": "2026-10-30" }]
+				}
+			}
+		},
+		{
+			"name": "D2 upcoming of SS-1001",
+			"request": {
+				"method": "GET",
+				"url": {
+					"raw": "http://localhost:1014/api/patients/SS-1001/upcoming",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "patients", "SS-1001", "upcoming"]
+				}
+			}
+		},
+		{
+			"name": "D2 error 404 unknown ssNumber",
+			"request": {
+				"method": "GET",
+				"url": {
+					"raw": "http://localhost:1014/api/patients/SS-9999/upcoming",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "patients", "SS-9999", "upcoming"]
+				}
+			}
+		},
+		{
+			"name": "D3 search doctors name=gis",
+			"request": {
+				"method": "GET",
+				"url": {
+					"raw": "http://localhost:1014/api/doctors/search?name=gis",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "doctors", "search"],
+					"query": [{ "key": "name", "value": "gis" }]
+				}
+			}
+		},
+		{
+			"name": "D4 dashboard summary",
+			"request": {
+				"method": "GET",
+				"url": {
+					"raw": "http://localhost:1014/api/dashboard/summary",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "dashboard", "summary"]
+				}
+			}
+		},
+		{
+			"name": "Bonus top-medicines",
+			"request": {
+				"method": "GET",
+				"url": {
+					"raw": "http://localhost:1014/api/prescriptions/stats/top-medicines",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "prescriptions", "stats", "top-medicines"]
+				}
+			}
+		},
+		{
+			"name": "Bonus doctor workload",
+			"request": {
+				"method": "GET",
+				"url": {
+					"raw": "http://localhost:1014/api/doctors/workload?start=2026-10-01&end=2026-10-31",
+					"host": ["http://localhost:1014"],
+					"path": ["api", "doctors", "workload"],
+					"query": [
+						{ "key": "start", "value": "2026-10-01" },
+						{ "key": "end", "value": "2026-10-31" }
+					]
+				}
+			}
+		}
+	]
+}
